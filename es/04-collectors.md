@@ -1,33 +1,17 @@
 Collectors
 ------
 
-On [day 2](http://shekhargulati.com/2015/07/26/day-2-lets-learn-about-streams/),
-you learned that the Stream API can help you work with collections in a
-declarative manner. We looked at `collect`, which is a terminal operation that
-collects the result set of a stream pipeline in a `List`. `collect` is a
-reduction operation that reduces a stream to a value. The value could be a
-Collection, Map, or a value object. You can use `collect` to achieve following:
+En el [día 2](https://github.com/malobato/java8-the-missing-tutorial/blob/master/03-streams.md), aprendiste que el API Stream puede ayudarte a trabajar con colecciones de manera declarativa. Observamos el método `collect`, que es una operación terminal que acumula el conjunto de resultados de una tubería de flujo en un `List`. `Collect` es una operación de reducción que reduce un flujo a un valor. El valor podría ser un `Collection`, un `Map` o un objeto valor. Puedes usar `collect` para obtener lo siguiente:
 
-1. **Reducing stream to a single value:** Result of the stream execution can be
-reduced to a single value. Single value could be a `Collection` or numeric value
-like int, double, etc or a custom value object.
+1. **Reducir un flujo a un simple valor:** El resultado de la ejecución del flujo se puede reducir a un simple valor. Un valor simple podría ser un `Collection` o un valor numérico como un int, double, etc o un objeto de valor personalizado.
 
-2. **Group elements in a stream:** Group all the tasks in a stream by TaskType.
-This will result in a `Map<TaskType, List<Task>>` with each entry containing a
-TaskType and its associated Tasks. You can use any other Collection instead of a
-List as well. If you don't need all the tasks associated with a TaskType, you
-can alternatively produce a `Map<TaskType, Task>`. One example could be grouping
-tasks by type and obtaining the first created task.
+2. **Agrupar elementos en un flujo:** Agrupar todas las tareas de un flujo por tipo de tarea. El resultado será un `Map<TaskType, List<Task>>` con cada entrada conteniendo el tipo de tarea y sus tareas asociadas. También puedes usar cualquier otra colección en vez de un `List`. Si no necesitas todas las tareas asociadas con un tipo de tarea, también puedes producir `Map<TaskType, Task>`. Un ejemplo podría ser agrupar las tareas por tipo y obtener la primera tarea creada.
 
-3. **Partition elements in a stream:** You can partition a stream into two
-groups -- e.g. due and completed tasks.
+3. **Dividir los elementos de un flujo:** Puedes dividir un flujo en dos grupos -- tareas esperadas y completadas.
 
-## Collector in Action
+## Collector en Acción
 
-To feel the power of `Collector` let us look at the example where we have to
-group tasks by their type. In Java 8, we can achieve grouping by TaskType by
-writing code shown below. **Please refer to [day 2](http://shekhargulati.com/2015/07/26/day-2-lets-learn-about-streams/)
-blog where we talked about the example domain we will use in this series**
+Para sentir el poder de `Collector` vamos a observar el ejemplo donde tenemos que agrupar tareas por su tipo. En Java 8, podemos conseguir agrupar por tipo de tarea con el siguiente código. **Por favor revisar el [día 2](https://github.com/malobato/java8-the-missing-tutorial/blob/master/02-lambdas.md) del blog donde hablamos sobre el ejemplo que seguimos en esta serie.**
 
 ```java
 private static Map<TaskType, List<Task>> groupTasksByType(List<Task> tasks) {
@@ -35,10 +19,7 @@ private static Map<TaskType, List<Task>> groupTasksByType(List<Task> tasks) {
 }
 ```
 
-The code shown above uses `groupingBy` `Collector` defined in the `Collectors`
-utility class. It creates a Map with key as the `TaskType` and value as the list
-containing all the tasks which have same `TaskType`. To achieve the same in Java
-7, you would have to write the following.
+El código siguiente usa `groupingBy` de `Collector` definido en la clase de utilidad `Collectors`. Crea un mapa con clave `TaskType` y valor una lista que contiene todas las tareas con el mismo `TaskType`. Para conseguir lo mismo en Java 7 habría que escribir el siguiente código.
 
 ```java
 public static void main(String[] args) {
@@ -60,23 +41,18 @@ public static void main(String[] args) {
 }
 ```
 
-## Collectors: Common reduction operations
+## Collectors: Operaciones de reducción comunes
 
-The `Collectors` utility class provides a lot of static utility methods for
-creating collectors for most common use cases like accumulating elements into a
-Collection, grouping and partitioning elements, or summarizing elements
-according to various criteria. We will cover the most common `Collector`s in
-this blog.
+La clase utilidad `Collectors` proporcinoa un montón de métodos estáticos de utilidad para crear acumuladores para la mayoría de casos de uso comunes como acumular elementos en una colección, agrupar y parciticionar elementos y resumir elementos de acuerdo a varios criterios. Cubriremos la mayoría de casos comunes de `Collector` en este blog.
 
-## Reducing to a single value
 
-As discussed above, collectors can be used to collect stream output to a
-Collection or produce a single value.
+## Reducir a un simple valor
 
-### Collecting data into a List
+Como ya vimos, los acumuladores se pueden usar para recoger la salida de un flujo en una colección o generar un valor simple.
 
-Let's write our first test case -- given a list of Tasks we want to collect all
-the titles into a List.
+### Recoger datos en una lista
+
+Vamos a escribir nuestro primer caso de prueba -- dada una lista de tareas queremos recoger sus títulos en una lista.
 
 ```java
 import static java.util.stream.Collectors.toList;
@@ -88,13 +64,11 @@ public class Example2_ReduceValue {
 }
 ```
 
-The `toList` collector uses the List's `add` method to add elements into the
-resulting List. `toList` collector uses `ArrayList` as the List implementation.
+El acumulador `toList` usa el método de `List` `add` para añadir elementos dentro de la lista resultante. El acumulador `toList` usa un `ArrayList` como implementación de la lista.
 
-### Collecting data into a Set
+### Recoger datos en un conjunto
 
-If we want to make sure only unique titles are returned and we don't care about
-order then we can use `toSet` collector.
+Si queremos estar seguros de que sólo recogemos títulos únicos y no nos preocupa el orden, podemos usar el acumulador `toSet`.
 
 ```java
 import static java.util.stream.Collectors.toSet;
@@ -104,16 +78,11 @@ public Set<String> uniqueTitles(List<Task> tasks) {
 }
 ```
 
-The `toSet` method uses a `HashSet` as the Set implementation to store the
-result set.
+El método `toSet` usa un `HashSet` como implementación del conjunto para guardar el resultado.
 
-### Collecting data into a Map
+### Recoger datos en un mapa
 
-You can convert a stream to a Map by using the `toMap` collector. The `toMap`
-collector takes two mapper functions to extract the key and values for the Map.
-In the code shown below, `Task::getTitle` is `Function` that takes a task and
-produces a key with only title. The **task -> task** is a lambda expression that
-just returns itself i.e. task in this case.
+Puedes convertir un flujo en un mapa usando el acumulador `toMap`. El acumulador `toMap` toma dos funciones de mapeado para extraer la llave y los valores del mapa. En el código siguiente `Task::getTitle` es una función que toma una tarea y produce una clave con un único título. **task -> task** es una expresión lambda que se devuelve a si misma. P. ej. la tarea en este caso.
 
 ```java
 private static Map<String, Task> taskMap(List<Task> tasks) {
@@ -121,9 +90,7 @@ private static Map<String, Task> taskMap(List<Task> tasks) {
 }
 ```
 
-We can improve the code shown above by using the `identity` default method in
-the `Function` interface to make code cleaner and better convey developer
-intent, as shown below.
+Podemos mejorar el código anterior usando el método por defecto `identity` en el interfaz `Function` para generar código más limpio y que transmita mucho mejor la intención del programador.
 
 ```java
 import static java.util.function.Function.identity;
@@ -133,19 +100,14 @@ private static Map<String, Task> taskMap(List<Task> tasks) {
 }
 ```
 
-The code to create a Map from the stream will throw an exception when duplicate
-keys are present. You will get an error like the one shown below.
+El código para crear un mapa a partir de un flujo lanzará una excepción si existen claves duplicadas. Obtendrás un error como el siguiente.
 
 ```
 Exception in thread "main" java.lang.IllegalStateException: Duplicate key Task{title='Read Version Control with Git book', type=READING}
 at java.util.stream.Collectors.lambda$throwingMerger$105(Collectors.java:133)
 ```
 
-You can handle duplicates by using another variant of the `toMap` function which
-allows us to specify a merge function. The merge function allows a client to
-specify how they want to resolve collisions between values associated with the
-same key. In the code shown below, we just used the newer value, but you can
-equally write an intelligent algorithm to resolve collisions.
+Puedes controlar los duplicados usando otra variante de la función `toMap` que nos permite especificar una función de unión. La función de uníón permite al cliente especificar como quiere resolver la colisión entre valores asociados a la misma clave. En el código siguiente, sólo usaremos el último valor pero puedes escribti un algoritmo para resolver la colisión.
 
 ```java
 private static Map<String, Task> taskMap_duplicates(List<Task> tasks) {
@@ -153,9 +115,7 @@ private static Map<String, Task> taskMap_duplicates(List<Task> tasks) {
 }
 ```
 
-You can use any other Map implementation by using the third variant of `toMap`
-method. This requires you to specify `Map` `Supplier` that will be used to store
-the result.
+Puedes usar cualquier otra implementación de mapa usando la tercera variante del método `toMap`. Esto require que especifiques el `Map` `Supplier` que se usará para guardar el resultado.
 
 ```
 public Map<String, Task> collectToMap(List<Task> tasks) {
@@ -163,15 +123,11 @@ public Map<String, Task> collectToMap(List<Task> tasks) {
 }
 ```
 
-Similar to the `toMap` collector, there is also `toConcurrentMap` collector,
-which produces a `ConcurrentMap` instead of a `HashMap`.
+Similar al acumulador `toMap` también esta el acumulador `ToConcurrentMap` que produce un `ConcurrentMap` en vez de un `HashMap`.
 
-### Using other collections
+### Usando otras colecciones
 
-The specific collectors like `toList` and `toSet` do not allow you to specify
-the underlying List or Set implementation. You can use the `toCollection`
-collector when you want to collect the result to other types of collections, as
-shown below.
+Los acumuladores específicos como `toList` y `toSet` no te permiten especificar la implementación de la lista o del conjunto. Puedes usar el acumulador `toCollection` cuando quieras recoger el resultado en otros tipos de colecciones como se muestra a continuación.
 
 ```
 private static LinkedHashSet<Task> collectToLinkedHaskSet(List<Task> tasks) {
@@ -179,7 +135,7 @@ private static LinkedHashSet<Task> collectToLinkedHaskSet(List<Task> tasks) {
 }
 ```
 
-### Finding Task with longest title
+### Encontrando la tarea con el título más largo
 
 ```java
 public Task taskWithLongestTitle(List<Task> tasks) {
@@ -187,7 +143,7 @@ public Task taskWithLongestTitle(List<Task> tasks) {
 }
 ```
 
-### Count total number of tags
+### Contando el número total de etiquetas
 
 ```java
 public int totalTagCount(List<Task> tasks) {
@@ -195,7 +151,7 @@ public int totalTagCount(List<Task> tasks) {
 }
 ```
 
-### Generate summary of Task titles
+### Generando un resumen de títulos de tarea
 
 ```java
 public String titleSummary(List<Task> tasks) {
@@ -203,17 +159,13 @@ public String titleSummary(List<Task> tasks) {
 }
 ```
 
-## Grouping Collectors
+## Agrupando acumuladores
 
-One of the most common use case of Collector is to group elements. Let's look at
-various examples to understand how we can perform grouping.
+Uno de los casos de uso más comunes es agrupar elementos. Vamos a ver varios ejemplos para comprender como podemos realizar agrupaciones.
 
-### Example 1: Grouping tasks by type
+### Ejemplo 1: Agrupando tareas por tipo
 
-Let's look at the example shown below, where we want to group all the tasks
-based on their `TaskType`. You can very easily perform this task by using the
-`groupingBy` Collector of the `Collectors` utility class. You can make it more
-succinct by using method references and static imports.
+Vamos a ver el ejemplo mostrado abajo donde queremos agrupar todas las tareas basándonos en su `TaskType`. Puedes realizar esta tarea de una forma muy sencilla usando el acumulador `groupingBy` de la clase de utilidad `Collectors`. Puedes acortarlo más usando referencias a método e importaciones estáticas.
 
 ```java
 import static java.util.stream.Collectors.groupingBy;
@@ -222,13 +174,13 @@ private static Map<TaskType, List<Task>> groupTasksByType(List<Task> tasks) {
 }
 ```
 
-It will produce the output shown below.
+Producirá la siguiente salida.
 
 ```
 {CODING=[Task{title='Write a mobile application to store my tasks', type=CODING, createdOn=2015-07-03}], WRITING=[Task{title='Write a blog on Java 8 Streams', type=WRITING, createdOn=2015-07-04}], READING=[Task{title='Read Version Control with Git book', type=READING, createdOn=2015-07-01}, Task{title='Read Java 8 Lambdas book', type=READING, createdOn=2015-07-02}, Task{title='Read Domain Driven Design book', type=READING, createdOn=2015-07-05}]}
 ```
 
-### Example 2: Grouping by tags
+### Ejemplo 2: Agrupando por etiquetas
 
 ```java
 private static Map<String, List<Task>> groupingByTag(List<Task> tasks) {
@@ -256,9 +208,9 @@ private static Map<String, List<Task>> groupingByTag(List<Task> tasks) {
     }
 ```
 
-### Example 3: Group task by tag and count
+### Ejemplo 3: Agrupando tareas por etiqueta y número
 
-Combining classifiers and Collectors
+Combinando clasificadores y acumuladores.
 
 ```java
 private static Map<String, Long> tagsAndCount(List<Task> tasks) {
@@ -268,7 +220,7 @@ private static Map<String, Long> tagsAndCount(List<Task> tasks) {
     }
 ```
 
-### Example 4: Grouping by TaskType and createdOn
+### Ejemplo 4: Agrupando por tipo de tarea y fecha de creación
 
 ```java
 private static Map<TaskType, Map<LocalDate, List<Task>>> groupTasksByTypeAndCreationDate(List<Task> tasks) {
@@ -276,12 +228,9 @@ private static Map<TaskType, Map<LocalDate, List<Task>>> groupTasksByTypeAndCrea
     }
 ```
 
-## Partitioning
+## Dividiendo en partes
 
-There are times when you want to partition a dataset into two datasets based on
-a predicate. For example, we can partition tasks into two groups by defining a
-partitioning function that partitions tasks into two groups -- one with due date
-before today, and one with the others.
+Hay veces en las que quieres partir un conjunto de datos en dos basándote en un predicado. Por ejemplo, podemos partir tareas en dos grupos definiendo una función de reparto que parta las tareas en dos grupos -- uno con fecha de vencimiento anterior a hoy y otro con fecha de vencimiento posterior a hoy.
 
 ```java
 private static Map<Boolean, List<Task>> partitionOldAndFutureTasks(List<Task> tasks) {
@@ -289,11 +238,9 @@ private static Map<Boolean, List<Task>> partitionOldAndFutureTasks(List<Task> ta
 }
 ```
 
-## Generating statistics
+## Generando estadísticas
 
-Another group of collectors that are very helpful are collectors that produce
-statistics. These work on the primitive datatypes like `int`, `double`, and
-`long`; and can be used to produce statistics like those shown below.
+Otro grupo de acumuladores que son muy útiles son los acumuladores que producen estadísticas. Estos trabajan con tipos de datos elementales como int, double, long y pueden usarse para generar estadísticar como la que se muestra a continuación.
 
 ```java
 IntSummaryStatistics summaryStatistics = tasks.stream().map(Task::getTitle).collect(summarizingInt(String::length));
@@ -304,18 +251,16 @@ System.out.println(summaryStatistics.getMin()); //24
 System.out.println(summaryStatistics.getSum()); //162
 ```
 
-There are other variants as well for other primitive types like
-`LongSummaryStatistics` and `DoubleSummaryStatistics`
+También existen otras variantes para otros tipos elementales como `LongSummaryStatistics` y `DoubleSummaryStatistics`.
 
-You can also combine one `IntSummaryStatistics` with another using the `combine`
-operation.
+También puedes combinar un `IntSummaryStatistics` con otro usando la operación `combine`.
 
 ```java
 firstSummaryStatistics.combine(secondSummaryStatistics);
 System.out.println(firstSummaryStatistics)
 ```
 
-## Joining all titles
+## Uniendo todos los títulos
 
 ```java
 private static String allTitles(List<Task> tasks) {
@@ -323,7 +268,7 @@ private static String allTitles(List<Task> tasks) {
 }
 ```
 
-## Writing a custom Collector
+## Escribiendo un acumulador personalizado
 
 ```java
 import com.google.common.collect.HashMultiset;
@@ -388,10 +333,9 @@ public class MultisetCollectorExample {
 }
 ```
 
-## Word Count in Java 8
+## Contador de palabras en Java 8
 
-We will end this section by writing the famous word count example in Java 8
-using Streams and Collectors.
+Terminaremos esta sección escribiendo en Java 8 el famoso ejemplo de contar palabras usando flujos y acumuladores.
 
 ```java
 public static void wordCount(Path path) throws IOException {
@@ -406,4 +350,4 @@ public static void wordCount(Path path) throws IOException {
 }
 ```
 
-[![Analytics](https://ga-beacon.appspot.com/UA-59411913-3/shekhargulati/java8-the-missing-tutorial/04-collectors)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-74043032-1/malobato/java8-the-missing-tutorial/04-collectors)](https://github.com/igrigorik/ga-beacon)

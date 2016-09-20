@@ -1,16 +1,11 @@
-Map Improvements
+Mejoras en Map
 ---------
 
-Map is one the most important data structure. In Java 8, a lot of goodies has
-been added to the Map API that will make it easy to work with them. We will look
-at all the enhancements made to them one by one. Every feature is shown along
-with its JUnit test case.
+Map es una de las estructuras de datos más importantes. En Java 8, se han añadido un montón de mejoras al API Map que harán más fácil el trabajar con él. Veremos todas estas mejoras una a una. Cada característica se mostrará con su correspondiente caso de prueba JUnit.
 
-## Create Map from List
+## Crear un Map a partir de un List
 
-Most of the times we want to create a map from existing data. Let's suppose we
-have a list of tasks, every task has an id and other associated data like title,
-description, etc.
+La mayoría de las veces queremos crear un mapa a partir de datos ya existentes. Vamos a suponer que tenemos una lista de tareas, cada tarea tiene un identificador y otros datos asociados como el título, la descripción, etc.
 
 ```java
 import static java.util.function.Function.identity;
@@ -29,10 +24,9 @@ public void shouldCreateMapFromTaskList() throws Exception {
 }
 ```
 
-## Using a different Map implementation
+## Usar una implementación diferente de Map
 
-The default implementation used by `Collectors.toMap` is `HashMap`. You can also
-specify your own Map implementation by providing a supplier.
+La implementación por defecto usada por `Collectors.toMap` es `HashMap`. Puedes especificar tu propia implementación de Map suministrando un proveedor.
 
 ```java
 @Test
@@ -49,10 +43,9 @@ public void shouldCreateLinkedMapFromTaskList() throws Exception {
 }
 ```
 
-## Handling duplicates
+## Manejando duplicados
 
-One thing that we glossed over in the last example was what should happen if
-there are duplicates. To handle duplicates there is a argument
+Una cosa que pasamos por alto en el último ejemplo es que pasaría si hubiese duplicados. Para controlar los duplicados tenemos un argumento.
 
 ```java
 @Test
@@ -68,13 +61,13 @@ public void shouldHandleTaskListWithDuplicates() throws Exception {
 }
 ```
 
-This test will fail
+El test fallará.
 
 ```
 java.lang.IllegalStateException: Duplicate key Task{title='Write blog on Java 8 Map improvements', type=BLOGGING}
 ```
 
-You can handle the error by specifying your merge function.
+Puedes controlar el error especificando tu función de unión.
 
 ```java
 @Test
@@ -87,7 +80,7 @@ public void shouldHandleTaskListWithDuplicates() throws Exception {
 }
 ```
 
-## Create Map from tuples
+## Crear un Map a partir de tuplas
 
 ```java
 public static <T, U> Map<T, U> createMap(SimpleEntry<T, U>... entries) {
@@ -95,4 +88,4 @@ public static <T, U> Map<T, U> createMap(SimpleEntry<T, U>... entries) {
 }
 ```
 
-[![Analytics](https://ga-beacon.appspot.com/UA-59411913-3/shekhargulati/java8-the-missing-tutorial/06-map)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-74043032-1/malobato/java8-the-missing-tutorial/06-map)](https://github.com/igrigorik/ga-beacon)
