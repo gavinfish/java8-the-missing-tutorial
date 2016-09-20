@@ -460,7 +460,7 @@ private static List<String> allDistinctTags(List<Task> tasks) {
 
 The Stream API has methods that allows the user to check if elements in the
 dataset match a given property. These methods are `allMatch`, `anyMatch`,
-`noneMatch`, `findFirst`, and `findAny`. To check if all reading titles have a
+`noneMatch`, `findFirst`, and `findAny`. To check if all reading tasks have a
 tag with name `books`, we can write code as shown below.
 
 ```java
